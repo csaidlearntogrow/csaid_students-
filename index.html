@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science Level 200 Student Roll List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .logo-text {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            padding: 10px 20px;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-filter {
+            padding: 32px 40px;
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+
+        .table-container {
+            padding: 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+            background: #f7fafc;
+        }
+
+        thead th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            background: #f7fafc;
+        }
+
+        thead th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        thead th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        tbody td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .id-column {
+            font-weight: 600;
+            color: #667eea;
+            width: 60px;
+        }
+
+        .student-id-column {
+            font-family: 'Courier New', monospace;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .name-column {
+            font-weight: 500;
+            color: #1a202c;
+        }
+
+        .gender-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .gender-male {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .gender-female {
+            background: #fbb6ce;
+            color: #97266d;
+        }
+
+        .dob-column {
+            color: #718096;
+        }
+
+        .no-student-id {
+            color: #cbd5e0;
+            font-style: italic;
+        }
+
+        .footer {
+            padding: 24px 40px;
+            background: #f7fafc;
+            text-align: center;
+            color: #718096;
+            font-size: 0.875rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .table-container {
+                padding: 20px;
+            }
+
+            thead th,
+            tbody td {
+                padding: 12px 10px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .search-filter {
+                display: none;
+            }
+
+            tbody tr:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-text">CSAID</div>
+            </div>
+            <h1>Computer Science Level 200</h1>
+            <p>BTech Student Roll List</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">68</span>
+                    <span class="stat-label">Total Students</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">54</span>
+                    <span class="stat-label">Male</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">14</span>
+                    <span class="stat-label">Female</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-filter">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search by name, student ID, or date of birth...">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Date of Birth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="id-column">1</td>
+                        <td class="student-id-column">204100524</td>
+                        <td class="name-column">ARIJE HEPHZIBAH OWUSU-ANSAH</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">10th May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">2</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ABDUL SALAM SEIDU</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">18th April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">3</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ABDUL-RASHID AMPAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">10th May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">4</td>
+                        <td class="student-id-column">204103024</td>
+                        <td class="name-column">ABEDNEGO TETTY</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">26th January</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">5</td>
+                        <td class="student-id-column">204100824</td>
+                        <td class="name-column">ACQUAH PRINCESS KEZIAH</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">Not Provided</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">6</td>
+                        <td class="student-id-column">204101424</td>
+                        <td class="name-column">AFRIYIE BOATENG MICHEAL</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">27th April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">7</td>
+                        <td class="student-id-column">204201525</td>
+                        <td class="name-column">ALHASSAN SALMAN</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">10th December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">8</td>
+                        <td class="student-id-column">204101524</td>
+                        <td class="name-column">AMOAH KENNEDY WILSON</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">3rd July</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">9</td>
+                        <td class="student-id-column">204103724</td>
+                        <td class="name-column">AMOAKO WILLIAM AGYEKUM</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">21st March</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">10</td>
+                        <td class="student-id-column">204201025</td>
+                        <td class="name-column">AMOO LOWELL NYAMEKYE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">31st October</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">11</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ANNABEL SMITH</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">29th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">12</td>
+                        <td class="student-id-column">204102424</td>
+                        <td class="name-column">ANNAN BERNARD WILLIAM</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">23rd November</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">13</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ANSAH DAVID</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">16th November</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">14</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ANTWI NKETIA MICHEAL</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">18th April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">15</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ARTHUR FRANCIS</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">9th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">16</td>
+                        <td class="student-id-column">204100624</td>
+                        <td class="name-column">BAMFO PIUS TETTEH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">1st January</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">17</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">BOATEND EDWIN</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">1st May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">18</td>
+                        <td class="student-id-column">204104524</td>
+                        <td class="name-column">BRIAN AKUNOR DUAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">9th August</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">19</td>
+                        <td class="student-id-column">204102024</td>
+                        <td class="name-column">CHRISTIANA MENSAH</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">5th July</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">20</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">CLEMENTINA ACHIAA ASANTE</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">4th June</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">21</td>
+                        <td class="student-id-column">204201615</td>
+                        <td class="name-column">COLLINS ASANTE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">15th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">22</td>
+                        <td class="student-id-column">204104624</td>
+                        <td class="name-column">COLLINS KWESI KWAAKOH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">26th December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">23</td>
+                        <td class="student-id-column">204101024</td>
+                        <td class="name-column">DANIAL KOBINA BOADI</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">17th February</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">24</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">DAVID EDUTWUM EKUNDOH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">17th December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">25</td>
+                        <td class="student-id-column">204102324</td>
+                        <td class="name-column">DEBORAH TEKPETEY DEDE</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">25th February</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">26</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">DICKSON YAW OPOKU</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">14th December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">27</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">ELIAKIM YAW ADU</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">15th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">28</td>
+                        <td class="student-id-column">204103224</td>
+                        <td class="name-column">EMMANUEL AKUFFU-ADDO</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">9th December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">29</td>
+                        <td class="student-id-column">204101324</td>
+                        <td class="name-column">EMMANUEL DAVIES</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">15th July</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">30</td>
+                        <td class="student-id-column">204102924</td>
+                        <td class="name-column">EMMANUEL EKOW QUAYE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">1st November</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">31</td>
+                        <td class="student-id-column">204104024</td>
+                        <td class="name-column">EMMANUEL KWEKU ARTHUR</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">30th May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">32</td>
+                        <td class="student-id-column">204103824</td>
+                        <td class="name-column">EMMANUEL KWAME SAAH KOUFIE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">19th November</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">33</td>
+                        <td class="student-id-column">204101624</td>
+                        <td class="name-column">FELIX VALENTINE QUARM</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">13th October</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">34</td>
+                        <td class="student-id-column">204104424</td>
+                        <td class="name-column">GEORGE KWESI ESSON</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">4th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">35</td>
+                        <td class="student-id-column">204102124</td>
+                        <td class="name-column">GILBERT QUANSAH ONOMAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">3rd February</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">36</td>
+                        <td class="student-id-column">204103424</td>
+                        <td class="name-column">GODFRED ARTHUR</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">25th May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">37</td>
+                        <td class="student-id-column">204104224</td>
+                        <td class="name-column">GODFRED ENNINFUL</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">19th February</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">38</td>
+                        <td class="student-id-column">204104724</td>
+                        <td class="name-column">GODFRED GYESIE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">24th March</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">39</td>
+                        <td class="student-id-column">204100724</td>
+                        <td class="name-column">HAMZA UTHMAN</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">3rd September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">40</td>
+                        <td class="student-id-column">204102524</td>
+                        <td class="name-column">HENRY EDUNA KUSI</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">1st April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">41</td>
+                        <td class="student-id-column">204201425</td>
+                        <td class="name-column">HENRY MENSAH GRANT</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">1st December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">42</td>
+                        <td class="student-id-column">204100224</td>
+                        <td class="name-column">ISAAC KANTO HAYFORD</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">14th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">43</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">JOHN DADZIE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">14th September</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">44</td>
+                        <td class="student-id-column">204103124</td>
+                        <td class="name-column">KOBINA MENSAH EGYEI</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">15th February</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">45</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">KWAME OWUSU SEKYERE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">6th May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">46</td>
+                        <td class="student-id-column">204102624</td>
+                        <td class="name-column">MARK KOFI ESSUON</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">26th December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">47</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">MORIS GHANSAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">23rd May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">48</td>
+                        <td class="student-id-column">204104124</td>
+                        <td class="name-column">MUSTAPHA K.B ZAKARIYYAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">3rd November</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">49</td>
+                        <td class="student-id-column">204103624</td>
+                        <td class="name-column">NICHOLAS NYAN</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">8th January</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">50</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">OBED OWIREDU</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">11th June</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">51</td>
+                        <td class="student-id-column">204100324</td>
+                        <td class="name-column">OBENG JUDE</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">5th October</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">52</td>
+                        <td class="student-id-column">204200725</td>
+                        <td class="name-column">OWUSU KWABENA DEBRAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">15th March</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">53</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">PERCY BEDU</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">13th October</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">54</td>
+                        <td class="student-id-column">204103524</td>
+                        <td class="name-column">PHYLLIS EPHRAIM</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">22nd December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">55</td>
+                        <td class="student-id-column">204103924</td>
+                        <td class="name-column">PRINCE SPIO MENSAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">12th April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">56</td>
+                        <td class="student-id-column">204102824</td>
+                        <td class="name-column">RABIATU ABASS</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">2nd November</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">57</td>
+                        <td class="student-id-column">204103324</td>
+                        <td class="name-column">RONALD AMOAKO MENSAH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">12th January</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">58</td>
+                        <td class="student-id-column">204102724</td>
+                        <td class="name-column">RUTH OBO BADUWAH</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">8th April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">59</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">SAMUEL NII ADDO</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">16th March</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">60</td>
+                        <td class="student-id-column">204102224</td>
+                        <td class="name-column">SANDRA DONKOH</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">1st May</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">61</td>
+                        <td class="student-id-column">202101224</td>
+                        <td class="name-column">SHADRACH DARKO</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">19th March</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">62</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">SINGOOAH CLEMENTINA PUKPE-EGIT</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">12th April</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">63</td>
+                        <td class="student-id-column">204101824</td>
+                        <td class="name-column">STEWART OSEI-KWARTENG</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">16th July</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">64</td>
+                        <td class="student-id-column">204100424</td>
+                        <td class="name-column">THEOPHILUS BLANKSON</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">16th July</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">65</td>
+                        <td class="student-id-column">204104924</td>
+                        <td class="name-column">THEOPHILUS EGYIR KUMI</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">2nd October</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">66</td>
+                        <td class="student-id-column">204101724</td>
+                        <td class="name-column">THERESA DONKOR</td>
+                        <td><span class="gender-badge gender-female">Female</span></td>
+                        <td class="dob-column">27th July</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">67</td>
+                        <td class="student-id-column">204100124</td>
+                        <td class="name-column">THOMAS SAKYI</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">22nd December</td>
+                    </tr>
+                    <tr>
+                        <td class="id-column">68</td>
+                        <td class="student-id-column no-student-id">Not Provided</td>
+                        <td class="name-column">WISDOM KWEKU ALORKA WEALTH</td>
+                        <td><span class="gender-badge gender-male">Male</span></td>
+                        <td class="dob-column">15th January</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Computer Science Department • Level 200 BTech • Academic Year 2024/2025
+        </div>
+    </div>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('studentTable');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent.toLowerCase();
+
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
