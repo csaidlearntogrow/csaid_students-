@@ -1,0 +1,1 @@
+Students entrepreneurship website for educational purposes
